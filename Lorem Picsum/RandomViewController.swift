@@ -8,29 +8,37 @@
 import UIKit
 
 class RandomViewController: UIViewController {
+    
+    let picsumController = PicsumController()
 
     override func viewDidLoad() {
+        loadNewImage() //Setting first image
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func loadNewImage(){
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        imageView.isHidden = true
+        self.picsumController.getImage(completion: { image in
+            DispatchQueue.main.async {
+                self.imageView.image = image
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+                self.imageView.isHidden = false
+            }
+        })
     }
-    */
     
-    @IBOutlet weak var backButtonOutlet: UIButton!
+    //MARK: Outlets
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var imageView: UIImageView!
     
-    // MARK: Actions
+    //MARK: Actions
     @IBAction func backButtonTapped(_ sender: Any) {
         self.dismiss(animated: true)
     }
-    
+    @IBAction func randomImageButtonTapped(_ sender: Any) {
+        loadNewImage()
+    }
 }
